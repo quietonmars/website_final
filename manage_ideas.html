@@ -1,0 +1,71 @@
+{% extends "base2.html" %}
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+<body style="background-color: #222f3e; color: whitesmoke">
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Manage Ideas Report</h3>
+    <form method="GET" action="{{ url_for('auth.manage_ideas') }}">
+       <label for="date-range">Date Range</label>
+<select class="form-select" id="date-range" name="date_range">
+    <option value="">Select Date Range</option>
+    {% for settings in settings %}
+    <option value="{{ settings.start_date.strftime('%Y-%b-%d') }} - {{ settings.closure_date.strftime('%Y-%b-%d') }}">
+        {{ settings.start_date.strftime('%Y-%b-%d') }} - {{ settings.closure_date.strftime('%Y-%b-%d') }}
+    </option>
+    {% endfor %}
+</select>
+
+        <br>
+    <button type="submit" class="btn btn-primary">Filter</button>
+        <br><br>
+
+        <table class="table table-striped" style="background-color: #c8d6e5">
+            <thead >
+                <tr>
+                    <th>Idea Name</th>
+                    <th>Posted By</th>
+                    <th>ID</th>
+                    <th>Idea Title</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Document</th>
+                    <th>Department</th>
+                    <th>Posted Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for idea in ideas %}
+                <tr>
+                    <td>{{ idea.title }}</td>
+                    <td>{{ idea.staff.name }}</td>
+                    <td>{{ idea.staff.nrc }}</td>
+                    <td>{{ idea.title }}</td>
+                    <td>{{ idea.description }}</td>
+                    <td>{{ categories[idea.category] }}</td>
+                    <td>{{ idea.document }}</td>
+                    <td>{{ departments[idea.staff.department] }}</td>
+                    <td>{{ idea.time.strftime('%Y-%b-%d<br>%I:%M %p')|safe }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="mt-3">
+            <label>**Anonymous posts will also be shown</label>
+            <br />
+            <br />
+            <u>Exceptional Reports</u>
+            <br />
+            <a href="{{ url_for('auth.generate_report_NoComment') }}" class="btn btn-primary">Download Ideas WITHOUT Comment**</a>
+            <br />
+            <a href="{{ url_for('auth.generate_report_Anon') }}" class="btn btn-danger">Download Anonymous Ideas and Comments**</a>
+        </div>
+    </form>
+</div>
+</body>
+{% endblock %}

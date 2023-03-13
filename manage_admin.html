@@ -1,0 +1,57 @@
+{% extends "base2.html" %}
+{% block title %}Manage Admin{% endblock %}
+{% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<body style="background-color: #222f3e; color: whitesmoke">
+    
+
+<div class="container">
+    <h3 align="center">Manage Admin</h3>
+    <table class="table table-light">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>NRC</th>
+                <th>Type</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Phone No.</th>
+                <th>Address</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for admin in admins %}
+            <tr>
+                <td>{{ admin.id }}</td>
+                <td>{{ admin.name }}</td>
+                <td>{{ admin.nrc }}</td>
+                <td>{{ admin.type }}</td>
+                <td>{{ admin.email }}</td>
+                <td>{{ admin.department.name }}</td>
+                <td>{{ admin.phone_no }}</td>
+                <td>{{ admin.address }}</td>
+                <td>{{ admin.username }}</td>
+                <td>*******</td>
+                <td>
+                    {% if admin.status == 'pending' %}
+                    <a href="{{ url_for('auth.confirm_admin_status', id=admin.id, status='approved') }}" class="btn btn-sm btn-primary">Approve</a>
+                    <a href="{{ url_for('auth.confirm_admin_status', id=admin.id, status='rejected') }}" class="btn btn-sm btn-warning">Reject</a>
+                    {% else %}
+                        {{ admin.status }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- <a href="{{ url_for('auth.new_admin') }}" class="btn btn-primary">Add New Admin</a> -->
+</div>
+
+</body>
+{% endblock %}

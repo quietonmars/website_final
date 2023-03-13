@@ -1,0 +1,46 @@
+{% extends "base2.html" %}
+{% block title %}Admin Home{% endblock %}
+{% block content %}
+
+<h1 align="center">View Ideas Admin</h1>
+<link rel="stylesheet" href="/static/ideas.css"/>
+
+    <form method="get">
+        <label for="sort">Sort by:</label>
+        <select name="sort" id="sort">
+            <option value="most_viewed">Most Viewed</option>
+            <option value="most_liked">Most Liked</option>
+            <option value="most_recent" selected>Most Recent</option>
+        </select>
+        <input type="submit" value="Sort" class="btn btn-primary">
+    </form>
+
+    <form method="POST">
+      {% for idea in ideas.items %}
+
+<div class="idea-box" id="idea-{{ idea.id }}" >
+  <a href="{{ url_for('auth.idea_detail_admin', idea_id=idea.id) }}"><h2>{{ idea.title }}</h2></a>
+  <p>{{ idea.description }}</p>
+  <p>Category: {{ categories[idea.category] }}</p>
+  <p>Department: {{ departments[idea.staff.department] }}</p>
+  <p>Time: {{ idea.time.strftime('%Y-%b-%d %I:%M %p') }}</p>
+    <p>Views: {{ idea.view_count }}</p>
+  <p>Document: <a href="/static/uploads/{{idea.document}}">{{ idea.document }}</a></p>
+    <p>Likes: {{ idea.like }}</p>
+    <p>Disikes: {{ idea.dislike }}</p>
+</div>
+{% endfor %}
+
+
+
+
+
+    </form>
+    {% if ideas.has_prev %}
+    <a href="{{ url_for('auth.admin_home', page=ideas.prev_num) }}" class="btn btn-primary">Previous</a>
+    {% endif %}
+    <span class="pagination-info">{{ ideas.page }} of {{ ideas.pages }}</span>
+    {% if ideas.has_next %}
+    <a href="{{ url_for('auth.admin_home', page=ideas.next_num) }}" class="btn btn-primary">Next</a>
+    {% endif %}
+{% endblock %}
